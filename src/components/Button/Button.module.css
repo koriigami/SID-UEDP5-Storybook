@@ -1,0 +1,126 @@
+/*
+ * Every value below is a token. No hex, no magic numbers — the whole component
+ * lives inside the design-system contract so a Figma token change flows in on
+ * the next `npm run tokens` without touching this file.
+ */
+
+.root {
+  --_bg: var(--color-accent-default);
+  --_bg-hover: var(--color-accent-hover);
+  --_bg-pressed: var(--color-accent-pressed);
+  --_fg: var(--color-text-on-brand);
+  --_border: transparent;
+  --_border-focus: var(--color-focus-ring);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+
+  padding-inline: var(--space-5);
+  border: 1px solid var(--_border);
+  border-radius: var(--radius-md);
+
+  background: var(--_bg);
+  color: var(--_fg);
+
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--font-line-height-tight);
+  text-align: center;
+  white-space: nowrap;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    color            var(--motion-duration-fast) var(--motion-easing-standard),
+    border-color     var(--motion-duration-fast) var(--motion-easing-standard),
+    box-shadow       var(--motion-duration-fast) var(--motion-easing-standard),
+    transform        var(--motion-duration-fast) var(--motion-easing-standard);
+}
+
+/* Sizes — control height driven by tokens, padding scales with the space ramp. */
+.size-sm { height: var(--size-control-sm); font-size: var(--font-size-caption); padding-inline: var(--space-4); }
+.size-md { height: var(--size-control-md); }
+.size-lg { height: var(--size-control-lg); font-size: var(--font-size-body); padding-inline: var(--space-7); }
+
+/* Variants — each sets only what differs from the primary defaults. */
+.variant-secondary {
+  --_bg: transparent;
+  --_bg-hover: var(--color-surface-sunken);
+  --_bg-pressed: var(--color-surface-canvas);
+  --_fg: var(--color-text-primary);
+  --_border: var(--color-border-default);
+}
+.variant-ghost {
+  --_bg: transparent;
+  --_bg-hover: var(--color-surface-sunken);
+  --_bg-pressed: var(--color-surface-canvas);
+  --_fg: var(--color-text-primary);
+  --_border: transparent;
+}
+.variant-danger {
+  --_bg: var(--color-danger-default);
+  --_bg-hover: var(--color-danger-text);
+  --_bg-pressed: var(--color-danger-text);
+  --_fg: var(--color-text-on-brand);
+}
+
+/* States. */
+.root:hover:not(:disabled) {
+  background: var(--_bg-hover);
+}
+.root:active:not(:disabled) {
+  background: var(--_bg-pressed);
+  transform: translateY(1px);
+}
+.root:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--size-focus-ring) var(--color-surface-canvas), 0 0 0 calc(var(--size-focus-ring) * 2) var(--_border-focus);
+}
+.root:disabled {
+  cursor: not-allowed;
+  background: var(--color-accent-disabled);
+  color: var(--color-text-muted);
+  border-color: transparent;
+}
+
+/* Loading — spinner overlays, contents hide via aria trick to preserve width. */
+.contents { display: inline-flex; align-items: center; gap: var(--space-3); }
+.contents[data-hidden] { visibility: hidden; }
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+.spinner svg {
+  width: var(--font-size-body);
+  height: var(--font-size-body);
+  stroke: currentColor;
+  animation: btnspin var(--motion-duration-slow) linear infinite;
+}
+@keyframes btnspin { to { transform: rotate(360deg); } }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--font-size-body);
+  height: var(--font-size-body);
+}
+
+.iconOnly { padding-inline: 0; aspect-ratio: 1; }
+.iconOnly .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Respect reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .root { transition: none; }
+  .spinner svg { animation-duration: 2s; }
+}

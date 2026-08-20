@@ -1,0 +1,37 @@
+import { Meta, Story, Canvas, Controls, Primary } from "@storybook/blocks";
+import * as ButtonStories from "./Button.stories";
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Primary action element. Variant + size props mirror the Figma component's
+variant properties 1:1 — `variant`, `size`, `loading`, `disabled`, `iconOnly`.
+
+## Interactive playground
+
+<Canvas of={ButtonStories.Primary} />
+<Controls />
+
+## All states
+
+Every variant × state combination, driven entirely by CSS variables. Toggle
+the Storybook theme in the toolbar and note that no story flashes.
+
+<Canvas of={ButtonStories.AllStates} />
+
+## Accessibility
+
+- `focus-visible` shows a ring built from `--color-focus-ring` +
+  `--size-focus-ring`; hitting <kbd>Tab</kbd> in the canvas will trigger it.
+- Loading buttons set `aria-busy="true"` and disable pointer interaction so
+  assistive tech is not misled.
+- `iconOnly` requires `ariaLabel` at compile time (TypeScript union).
+- WCAG AA contrast is validated by `@storybook/addon-a11y` on every story —
+  see the **Accessibility** tab.
+
+## Motion
+
+Transitions use `--motion-duration-fast` and `--motion-easing-standard`.
+Users with `prefers-reduced-motion: reduce` get no transitions and a slower
+spinner.

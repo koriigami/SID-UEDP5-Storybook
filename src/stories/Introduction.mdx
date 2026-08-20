@@ -1,0 +1,47 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Introduction" />
+
+# SID · UEDP5 Storybook
+
+Reference implementation for the **Assignment 2 — Figma → Storybook** design
+system project. This Storybook is deliberately small and readable: two
+components (Button, Input) and one Tokens gallery, all wired to
+[`_prod-design-system-V0.2.0`](https://www.figma.com/design/0fnvdNPdTEPs3ss2ImnjCg/_prod-design-system-V0.2.0?node-id=271-15877)
+Figma variables via a Style Dictionary pipeline.
+
+## Rubric it targets
+
+| Section | What to look at |
+| --- | --- |
+| **Token & code accuracy** | *Foundations → Tokens* — every value is a CSS variable resolved from `tokens/raw/*.json`. Search the repo for `#` — no hex literals in component styles. |
+| **Deployment & analytics** | Live on Vercel, GA4 firing on every story view. `docs/DEPLOY.md` walks through the setup. |
+| **Accessibility** | The **Accessibility** panel runs on every story. Focus rings, ARIA, and reduced-motion respect are built in. |
+| **Visual polish** | *Components → Button → All States* and *Input → All States* show hover, pressed, focus-visible, disabled, loading, error, and empty. Use the **Theme** toolbar to swap light/dark — no flash. |
+
+## Pipeline in one picture
+
+```
+Figma variables ──► scripts/fetch-figma-tokens.mjs ──► tokens/raw/*.json
+                                                                │
+                                                       scripts/build-tokens.mjs
+                                                                │
+                          ┌─────────────────────────────────────┼─────────────────┐
+                          ▼                                     ▼                 ▼
+              src/styles/tokens.light.css       src/styles/tokens.dark.css   src/tokens/generated.ts
+                          │                                     │                 │
+                          └────────► component .module.css uses var(--…) ◄────────┘
+```
+
+Change a variable in Figma → run `npm run tokens` → the CSS regenerates and
+every component inherits the new value with no code edit.
+
+## Local commands
+
+```bash
+npm install
+npm run dev              # storybook on http://localhost:6006
+npm run tokens           # rebuild CSS from tokens/raw/*.json
+npm run tokens:fetch     # (needs Figma MCP + a selected layer) refresh raw tokens
+npm run build-storybook  # static build → storybook-static/
+```

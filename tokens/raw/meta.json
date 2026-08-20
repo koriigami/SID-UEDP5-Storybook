@@ -1,0 +1,9 @@
+{
+  "source": "seed",
+  "note": "Placeholder tokens sized to match a real design system. Replace with real Figma output by running `npm run tokens:fetch` once the Figma MCP server is attached to the session.",
+  "figma": {
+    "fileKey": "0fnvdNPdTEPs3ss2ImnjCg",
+    "fileName": "_prod-design-system-V0.2.0",
+    "startNode": "271-15877"
+  }
+}
