@@ -1,36 +1,30 @@
 /*
- * Every value below is a token. No hex, no magic numbers — the whole component
- * lives inside the design-system contract so a Figma token change flows in on
- * the next `npm run tokens` without touching this file.
+ * Every value below is a design token. The four types set only what differs
+ * from the primary defaults; sizes only differ in height and padding.
  */
 
 .root {
-  --_bg: var(--color-accent-default);
-  --_bg-hover: var(--color-accent-hover);
-  --_bg-pressed: var(--color-accent-pressed);
-  --_fg: var(--color-text-on-brand);
-  --_border: transparent;
-  --_border-focus: var(--color-focus-ring);
+  --_bg:          var(--color-button-background-primary);
+  --_fg:          var(--color-button-text-primary);
+  --_stroke:      transparent;
+  --_state-layer: var(--color-state-layer-on-brand);
 
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  overflow: hidden;
 
-  padding-inline: var(--space-5);
-  border: 1px solid var(--_border);
-  border-radius: var(--radius-md);
-
+  border: 1px solid var(--_stroke);
+  border-radius: var(--radius-pill);
   background: var(--_bg);
   color: var(--_fg);
 
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-serif);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-body-sm);
-  line-height: var(--font-line-height-tight);
-  text-align: center;
-  white-space: nowrap;
+  font-size: var(--font-qwark-title-medium-size);
+  line-height: var(--font-qwark-title-medium-line-height);
+  letter-spacing: var(--font-qwark-title-medium-tracking);
 
   cursor: pointer;
   user-select: none;
@@ -39,88 +33,114 @@
     background-color var(--motion-duration-fast) var(--motion-easing-standard),
     color            var(--motion-duration-fast) var(--motion-easing-standard),
     border-color     var(--motion-duration-fast) var(--motion-easing-standard),
-    box-shadow       var(--motion-duration-fast) var(--motion-easing-standard),
-    transform        var(--motion-duration-fast) var(--motion-easing-standard);
+    box-shadow       var(--motion-duration-fast) var(--motion-easing-standard);
 }
 
-/* Sizes — control height driven by tokens, padding scales with the space ramp. */
-.size-sm { height: var(--size-control-sm); font-size: var(--font-size-caption); padding-inline: var(--space-4); }
-.size-md { height: var(--size-control-md); }
-.size-lg { height: var(--size-control-lg); font-size: var(--font-size-body); padding-inline: var(--space-7); }
+/* ── Types ─────────────────────────────────────────────────────────────── */
 
-/* Variants — each sets only what differs from the primary defaults. */
-.variant-secondary {
+.type-tonal {
+  --_bg: var(--color-button-background-accent);
+  --_fg: var(--color-button-icon-accent);
+  --_state-layer: var(--color-state-layer-on-accent);
+}
+
+.type-outline {
+  --_bg: var(--color-button-background-secondary);
+  --_fg: var(--color-button-text-secondary);
+  --_stroke: var(--color-button-stroke-secondary);
+  --_state-layer: var(--color-state-layer-on-surface);
+}
+
+.type-text {
   --_bg: transparent;
-  --_bg-hover: var(--color-surface-sunken);
-  --_bg-pressed: var(--color-surface-canvas);
-  --_fg: var(--color-text-primary);
-  --_border: var(--color-border-default);
-}
-.variant-ghost {
-  --_bg: transparent;
-  --_bg-hover: var(--color-surface-sunken);
-  --_bg-pressed: var(--color-surface-canvas);
-  --_fg: var(--color-text-primary);
-  --_border: transparent;
-}
-.variant-danger {
-  --_bg: var(--color-danger-default);
-  --_bg-hover: var(--color-danger-text);
-  --_bg-pressed: var(--color-danger-text);
-  --_fg: var(--color-text-on-brand);
+  --_fg: var(--color-button-text-secondary);
+  --_state-layer: var(--color-state-layer-on-surface);
 }
 
-/* States. */
-.root:hover:not(:disabled) {
-  background: var(--_bg-hover);
+/* ── Sizes ─────────────────────────────────────────────────────────────── */
+
+.size-default { height: var(--size-button-default); padding-inline: var(--space-7); gap: var(--space-3); }
+.size-small   { height: var(--size-button-small);   padding-inline: var(--space-5); gap: var(--space-3);
+                font-size: var(--font-qwark-label-large-size);
+                line-height: var(--font-qwark-label-large-line-height);
+                letter-spacing: var(--font-qwark-label-large-tracking); }
+.size-xsmall  { height: var(--size-button-xsmall);  padding-inline: var(--space-4); gap: var(--space-2);
+                font-size: var(--font-qwark-label-medium-size);
+                line-height: var(--font-qwark-label-medium-line-height);
+                letter-spacing: var(--font-qwark-label-medium-tracking); }
+
+.size-default .icon { width: var(--size-icon-default); height: var(--size-icon-default); }
+.size-small   .icon { width: var(--size-icon-small);   height: var(--size-icon-small); }
+.size-xsmall  .icon { width: var(--size-icon-xsmall);  height: var(--size-icon-xsmall); }
+
+/* ── Interactive layers ────────────────────────────────────────────────── */
+
+.stateLayer {
+  position: absolute;
+  inset: 0;
+  background: var(--_state-layer);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  pointer-events: none;
 }
-.root:active:not(:disabled) {
-  background: var(--_bg-pressed);
-  transform: translateY(1px);
+
+.content {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  z-index: 1;
 }
-.root:focus-visible {
+.content[data-hidden] { visibility: hidden; }
+
+.icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.label { white-space: nowrap; }
+
+/* Hover / focus / active — real states and forced-state utilities.       */
+.root:hover:not(:disabled) .stateLayer,
+.root.state-hover .stateLayer                     { opacity: var(--opacity-state-hover); }
+
+.root:focus-visible:not(:disabled) .stateLayer,
+.root.state-focused .stateLayer                   { opacity: var(--opacity-state-focus); }
+
+.root:active:not(:disabled) .stateLayer,
+.root.state-pressed .stateLayer                   { opacity: var(--opacity-state-pressed); }
+
+.root:focus-visible,
+.root.state-focused {
   outline: none;
-  box-shadow: 0 0 0 var(--size-focus-ring) var(--color-surface-canvas), 0 0 0 calc(var(--size-focus-ring) * 2) var(--_border-focus);
-}
-.root:disabled {
-  cursor: not-allowed;
-  background: var(--color-accent-disabled);
-  color: var(--color-text-muted);
-  border-color: transparent;
+  box-shadow:
+    0 0 0 var(--size-focus-ring) var(--color-background-primary),
+    0 0 0 calc(var(--size-focus-ring) * 2) var(--color-focus-ring);
 }
 
-/* Loading — spinner overlays, contents hide via aria trick to preserve width. */
-.contents { display: inline-flex; align-items: center; gap: var(--space-3); }
-.contents[data-hidden] { visibility: hidden; }
-.spinner {
+.root:disabled,
+.root.state-disabled {
+  --_bg:     var(--color-button-background-disabled);
+  --_fg:     var(--color-button-text-disabled);
+  --_stroke: var(--color-button-stroke-disabled);
+  cursor: not-allowed;
+}
+.root.type-text:disabled,
+.root.type-text.state-disabled { --_bg: transparent; --_stroke: transparent; }
+
+/* ── Loading ───────────────────────────────────────────────────────────── */
+
+.spinnerWrap {
   position: absolute;
   inset: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: currentColor;
+  z-index: 2;
 }
-.spinner svg {
-  width: var(--font-size-body);
-  height: var(--font-size-body);
-  stroke: currentColor;
-  animation: btnspin var(--motion-duration-slow) linear infinite;
-}
-@keyframes btnspin { to { transform: rotate(360deg); } }
+.spinnerWrap svg { width: var(--size-icon-default); height: var(--size-icon-default); }
+.spinner { animation: qwark-btn-spin var(--motion-duration-slow) linear infinite; transform-origin: center; }
+@keyframes qwark-btn-spin { to { transform: rotate(360deg); } }
 
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--font-size-body);
-  height: var(--font-size-body);
-}
-
-.iconOnly { padding-inline: 0; aspect-ratio: 1; }
-.iconOnly .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-/* Respect reduced motion. */
 @media (prefers-reduced-motion: reduce) {
-  .root { transition: none; }
-  .spinner svg { animation-duration: 2s; }
+  .root, .stateLayer { transition: none; }
+  .spinner { animation-duration: 2s; }
 }

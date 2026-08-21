@@ -1,0 +1,92 @@
+.root {
+  --_fg:          var(--color-icon-accent);
+  --_state-layer: var(--color-state-layer-on-accent);
+  --_border:      var(--color-m3-on-surface-variant);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+
+  font-family: var(--font-family-serif);
+  font-size: var(--font-qwark-label-large-size);
+  line-height: var(--font-qwark-label-large-line-height);
+  letter-spacing: var(--font-qwark-label-large-tracking);
+  color: var(--color-text-primary);
+}
+
+.root.error {
+  --_fg:          var(--color-icon-error);
+  --_state-layer: var(--color-state-layer-on-error);
+  --_border:      var(--color-icon-error);
+}
+
+.stateLayer {
+  position: absolute;
+  inset: calc(50% - var(--size-state-layer) / 2) auto auto calc(var(--space-2));
+  width: var(--size-state-layer);
+  height: var(--size-state-layer);
+  border-radius: var(--radius-pill);
+  background: var(--_state-layer);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  pointer-events: none;
+}
+
+.box {
+  position: relative;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--_border);
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-text-on-brand);
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    border-color     var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.box.filled { background: var(--_fg); border-color: var(--_fg); }
+
+/* Hover / focus / active */
+.root:hover .stateLayer,   .root.state-hover .stateLayer   { opacity: var(--opacity-state-hover); }
+.root:focus-within .stateLayer, .root.state-focused .stateLayer { opacity: var(--opacity-state-focus); }
+.root:active .stateLayer,  .root.state-pressed .stateLayer  { opacity: var(--opacity-state-pressed); }
+
+.root:has(input:focus-visible), .root.state-focused {
+  outline: none;
+  box-shadow: 0 0 0 var(--size-focus-ring) var(--color-focus-ring);
+  border-radius: var(--radius-pill);
+}
+.root.error:has(input:focus-visible), .root.error.state-focused {
+  box-shadow: 0 0 0 var(--size-focus-ring) var(--color-icon-error);
+}
+
+.root.state-disabled, .root:has(input:disabled) {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+  --_fg:     var(--color-icon-disabled);
+  --_border: var(--color-icon-disabled);
+  --_state-layer: transparent;
+}
+
+/* Visually hide the native input but keep it clickable and focusable */
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+}
+
+.label { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .box, .stateLayer { transition: none; }
+}

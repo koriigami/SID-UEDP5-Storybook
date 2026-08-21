@@ -2,39 +2,52 @@ import { Meta } from "@storybook/blocks";
 
 <Meta title="Introduction" />
 
-# SID · UEDP5 Storybook
+# Qwark · UEDP5 Storybook
 
-Reference implementation for the **Assignment 2 — Figma → Storybook** design
-system project. This Storybook is deliberately small and readable: two
-components (Button, Input) and one Tokens gallery, all wired to
-[`_prod-design-system-V0.2.0`](https://www.figma.com/design/0fnvdNPdTEPs3ss2ImnjCg/_prod-design-system-V0.2.0?node-id=271-15877)
-Figma variables via a Style Dictionary pipeline.
+Reference implementation for **Assignment 2 — Figma → Storybook**. Tokens
+and components are pulled straight from the Figma file
+[`_prod-design-system-V0.2.0`](https://www.figma.com/design/0fnvdNPdTEPs3ss2ImnjCg)
+via the Figma MCP, so every color, radius, and type ramp you see on-screen
+also exists in Figma with the same name.
 
-## Rubric it targets
+## What's in scope
 
-| Section | What to look at |
-| --- | --- |
-| **Token & code accuracy** | *Foundations → Tokens* — every value is a CSS variable resolved from `tokens/raw/*.json`. Search the repo for `#` — no hex literals in component styles. |
-| **Deployment & analytics** | Live on Vercel, GA4 firing on every story view. `docs/DEPLOY.md` walks through the setup. |
-| **Accessibility** | The **Accessibility** panel runs on every story. Focus rings, ARIA, and reduced-motion respect are built in. |
-| **Visual polish** | *Components → Button → All States* and *Input → All States* show hover, pressed, focus-visible, disabled, loading, error, and empty. Use the **Theme** toolbar to swap light/dark — no flash. |
+| Section | From Figma | Source of truth |
+| --- | --- | --- |
+| **Foundations → Tokens** | All variable collections used by the components below | `tokens/raw/primitives.json + semantic.{light,dark}.json` |
+| **Components → Button** | Node `14:21` | 4 types · 3 sizes · 5 states = 60 combinations |
+| **Components → Icon Button** | Node `3863:32746` | Same shape as Button, icon-only, `ariaLabel` required |
+| **Components → Checkbox** | Node `3907:23153` | Selected · Unselected · Indeterminate + Error variants |
+| **Components → Radio** | Node `4475:26681` | Selected · Unselected × 5 states |
 
-## Pipeline in one picture
+## The pipeline
 
 ```
-Figma variables ──► scripts/fetch-figma-tokens.mjs ──► tokens/raw/*.json
-                                                                │
-                                                       scripts/build-tokens.mjs
-                                                                │
-                          ┌─────────────────────────────────────┼─────────────────┐
-                          ▼                                     ▼                 ▼
-              src/styles/tokens.light.css       src/styles/tokens.dark.css   src/tokens/generated.ts
-                          │                                     │                 │
-                          └────────► component .module.css uses var(--…) ◄────────┘
+Figma variables ──► mcp__Figma__get_variable_defs ──► tokens/raw/*.json
+                                                            │
+                                              scripts/build-tokens.mjs
+                                                            │
+                       ┌────────────────────────────────────┼────────────────┐
+                       ▼                                    ▼                ▼
+        src/styles/tokens.light.css       src/styles/tokens.dark.css   src/tokens/generated.ts
+                       │                                    │                │
+                       └───► component .module.css uses var(--…) ◄──────────┘
 ```
 
-Change a variable in Figma → run `npm run tokens` → the CSS regenerates and
-every component inherits the new value with no code edit.
+## Rubric mapping
+
+- **Token & code accuracy** — every value is a `var(--…)`. Grep the repo
+  for `#` to prove no hex is hardcoded in a component.
+- **Deployment & analytics** — live on Vercel; GA4 fires `story_view` on
+  every story change (swap the placeholder `VITE_GA4_ID` in Vercel env
+  vars for the real one).
+- **Accessibility** — a11y addon runs on every story; components use
+  native semantics (`<button>`, `<input type="checkbox">`,
+  `<input type="radio">`) so keyboard and screen-reader behaviour is
+  correct by default. Focus rings use tokens.
+- **Visual polish** — every component has hover / focus / pressed /
+  disabled + loading (Button) + error (Checkbox) matrix stories. Toggle
+  the **Theme** in the toolbar to see the dark palette flip in place.
 
 ## Local commands
 
@@ -42,6 +55,6 @@ every component inherits the new value with no code edit.
 npm install
 npm run dev              # storybook on http://localhost:6006
 npm run tokens           # rebuild CSS from tokens/raw/*.json
-npm run tokens:fetch     # (needs Figma MCP + a selected layer) refresh raw tokens
+npm run tokens:fetch     # (needs Figma MCP) refresh raw tokens
 npm run build-storybook  # static build → storybook-static/
 ```

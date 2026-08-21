@@ -1,0 +1,16 @@
+import { Meta, Canvas, Controls } from "@storybook/blocks";
+import * as RadioStories from "./Radio.stories";
+
+<Meta of={RadioStories} />
+
+# Radio
+
+Mirror of Figma node `4475:26681`. Backed by native `<input type="radio">`
+so keyboard and screen-reader behaviour comes for free.
+
+<Canvas of={RadioStories.Selected} />
+<Controls />
+
+## All states
+
+<Canvas of={RadioStories.AllStates} />

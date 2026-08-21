@@ -1,0 +1,24 @@
+import { Meta, Canvas, Controls } from "@storybook/blocks";
+import * as CheckboxStories from "./Checkbox.stories";
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+Mirror of Figma node `3907:23153`. Material-3 style; error variants use
+`icon.error` and the `on-error` state layer.
+
+<Canvas of={CheckboxStories.Checked} />
+<Controls />
+
+## All states
+
+<Canvas of={CheckboxStories.AllStates} />
+
+## Accessibility
+
+- Backed by a real `<input type="checkbox">`. Native keyboard + screen-reader
+  behaviour, no custom `role="checkbox"` shim.
+- Indeterminate state exposes `aria-checked="mixed"`.
+- Error state sets `aria-invalid="true"` so assistive tech can announce the
+  invalid checkbox even when the label doesn't say "error".

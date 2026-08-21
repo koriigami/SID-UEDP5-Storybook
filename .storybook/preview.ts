@@ -21,7 +21,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Introduction", "Foundations", ["Tokens"], "Components", ["Button", "Input"]],
+        order: ["Introduction", "Foundations", ["Tokens"], "Components", ["Button", "Icon Button", "Checkbox", "Radio"]],
       },
     },
   },

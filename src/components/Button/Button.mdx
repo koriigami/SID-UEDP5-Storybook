@@ -1,37 +1,32 @@
-import { Meta, Story, Canvas, Controls, Primary } from "@storybook/blocks";
+import { Meta, Canvas, Controls } from "@storybook/blocks";
 import * as ButtonStories from "./Button.stories";
 
 <Meta of={ButtonStories} />
 
 # Button
 
-Primary action element. Variant + size props mirror the Figma component's
-variant properties 1:1 — `variant`, `size`, `loading`, `disabled`, `iconOnly`.
+Mirror of Figma node `14:21` — the Qwark web Button. Variant properties
+(`type`, `size`, `state`) map 1:1 to the Figma component, so a change in
+Figma should be a token or prop change in code, never a rewrite.
 
-## Interactive playground
+## Playground
 
 <Canvas of={ButtonStories.Primary} />
 <Controls />
 
-## All states
+## Every combination
 
-Every variant × state combination, driven entirely by CSS variables. Toggle
-the Storybook theme in the toolbar and note that no story flashes.
+4 types × 3 sizes × 5 states = **60** buttons, all rendered from the same
+`<Button>` component. No hex in the CSS — every value is a `var(--…)`.
 
 <Canvas of={ButtonStories.AllStates} />
 
 ## Accessibility
 
-- `focus-visible` shows a ring built from `--color-focus-ring` +
-  `--size-focus-ring`; hitting <kbd>Tab</kbd> in the canvas will trigger it.
-- Loading buttons set `aria-busy="true"` and disable pointer interaction so
-  assistive tech is not misled.
-- `iconOnly` requires `ariaLabel` at compile time (TypeScript union).
-- WCAG AA contrast is validated by `@storybook/addon-a11y` on every story —
-  see the **Accessibility** tab.
-
-## Motion
-
-Transitions use `--motion-duration-fast` and `--motion-easing-standard`.
-Users with `prefers-reduced-motion: reduce` get no transitions and a slower
-spinner.
+- Native `<button>` — full keyboard + assistive-tech support out of the box.
+- `:focus-visible` shows the double-ring `--color-focus-ring` outline; the
+  `forcedState="focused"` prop reproduces it for docs screenshots.
+- Loading state sets `aria-busy="true"` and disables clicks, so screen
+  readers announce the busy state instead of reading a phantom label.
+- `prefers-reduced-motion: reduce` drops the state-layer + focus transitions
+  and slows the spinner to 2 s.

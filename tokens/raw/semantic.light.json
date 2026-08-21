@@ -1,54 +1,61 @@
 {
   "color": {
-    "surface": {
-      "canvas":   { "$value": "{color.primitive.neutral.50}",  "$type": "color" },
-      "raised":   { "$value": "{color.primitive.neutral.0}",   "$type": "color" },
-      "sunken":   { "$value": "{color.primitive.neutral.100}", "$type": "color" },
-      "overlay":  { "$value": "{color.primitive.neutral.0}",   "$type": "color" }
+    "background": {
+      "primary":  { "$value": "{color.primitive.neutral.50}",  "$type": "color" },
+      "surface":  { "$value": "{color.primitive.neutral.0}",   "$type": "color" },
+      "sunken":   { "$value": "{color.primitive.neutral.100}", "$type": "color" }
     },
     "text": {
-      "primary":  { "$value": "{color.primitive.neutral.900}", "$type": "color" },
-      "secondary":{ "$value": "{color.primitive.neutral.600}", "$type": "color" },
-      "muted":    { "$value": "{color.primitive.neutral.500}", "$type": "color" },
-      "inverse":  { "$value": "{color.primitive.neutral.0}",   "$type": "color" },
-      "on-brand": { "$value": "{color.primitive.neutral.0}",   "$type": "color" },
-      "link":     { "$value": "{color.palette.rich.blue.60}",  "$type": "color" }
+      "primary":   { "$value": "{color.primitive.neutral.800}", "$type": "color" },
+      "secondary": { "$value": "{color.primitive.neutral.500}", "$type": "color" },
+      "disabled":  { "$value": "{color.primitive.neutral.400}", "$type": "color" },
+      "on-brand":  { "$value": "{color.primitive.on-brand}",    "$type": "color" }
     },
-    "border": {
-      "subtle":   { "$value": "{color.primitive.neutral.200}", "$type": "color" },
-      "default":  { "$value": "{color.primitive.neutral.300}", "$type": "color" },
-      "strong":   { "$value": "{color.primitive.neutral.500}", "$type": "color" }
+    "icon": {
+      "primary":   { "$value": "{color.primitive.neutral.700}", "$type": "color" },
+      "secondary": { "$value": "{color.primitive.neutral.500}", "$type": "color" },
+      "accent":    { "$value": "{color.primitive.brand.base}",  "$type": "color" },
+      "disabled":  { "$value": "{color.primitive.neutral.300}", "$type": "color" },
+      "error":     { "$value": "{color.primitive.error.50}",    "$type": "color" }
     },
-    "accent": {
-      "subtle":    { "$value": "{color.palette.rich.blue.10}", "$type": "color" },
-      "default":   { "$value": "{color.palette.rich.blue.50}", "$type": "color" },
-      "hover":     { "$value": "{color.palette.rich.blue.60}", "$type": "color" },
-      "pressed":   { "$value": "{color.palette.rich.blue.70}", "$type": "color" },
-      "disabled":  { "$value": "{color.primitive.neutral.200}","$type": "color" }
+    "stroke": {
+      "default":  { "$value": "{color.primitive.neutral.200}", "$type": "color" },
+      "disabled": { "$value": "{color.primitive.neutral.200}", "$type": "color" }
     },
-    "danger": {
-      "subtle":  { "$value": "{color.palette.rich.red.10}", "$type": "color" },
-      "default": { "$value": "{color.palette.rich.red.50}", "$type": "color" },
-      "text":    { "$value": "{color.palette.rich.red.70}", "$type": "color" }
+    "button": {
+      "background": {
+        "primary":   { "$value": "{color.primitive.brand.base}",   "$type": "color" },
+        "secondary": { "$value": "{color.primitive.neutral.0}",    "$type": "color" },
+        "accent":    { "$value": "{color.primitive.cyan.50}",      "$type": "color" },
+        "disabled":  { "$value": "{color.primitive.neutral.100}",  "$type": "color" }
+      },
+      "text": {
+        "primary":   { "$value": "{color.primitive.on-brand}",     "$type": "color" },
+        "secondary": { "$value": "{color.primitive.neutral.800}",  "$type": "color" },
+        "disabled":  { "$value": "{color.primitive.neutral.400}",  "$type": "color" }
+      },
+      "icon": {
+        "primary":   { "$value": "{color.primitive.neutral.100}",  "$type": "color" },
+        "secondary": { "$value": "{color.primitive.neutral.500}",  "$type": "color" },
+        "accent":    { "$value": "{color.primitive.brand.base}",   "$type": "color" },
+        "disabled":  { "$value": "{color.primitive.neutral.300}",  "$type": "color" }
+      },
+      "stroke": {
+        "secondary": { "$value": "{color.primitive.neutral.200}",  "$type": "color" },
+        "disabled":  { "$value": "{color.primitive.neutral.200}",  "$type": "color" }
+      }
     },
-    "success": {
-      "subtle":  { "$value": "{color.palette.rich.green.10}", "$type": "color" },
-      "default": { "$value": "{color.palette.rich.green.60}", "$type": "color" },
-      "text":    { "$value": "{color.palette.rich.green.80}", "$type": "color" }
+    "state-layer": {
+      "on-brand":     { "$value": "rgba(255, 255, 255, 0.10)", "$type": "color" },
+      "on-surface":   { "$value": "rgba(0, 0, 0, 0.08)",       "$type": "color" },
+      "on-accent":    { "$value": "rgba(0, 20, 132, 0.08)",    "$type": "color" },
+      "on-error":     { "$value": "rgba(179, 38, 30, 0.08)",   "$type": "color" }
     },
-    "warning": {
-      "subtle":  { "$value": "{color.palette.rich.orange.10}", "$type": "color" },
-      "default": { "$value": "{color.palette.rich.orange.60}", "$type": "color" },
-      "text":    { "$value": "{color.palette.rich.orange.80}", "$type": "color" }
-    },
-    "focus": {
-      "ring": { "$value": "{color.palette.rich.blue.50}", "$type": "color" }
+    "focus-ring": { "$value": "{color.primitive.brand.base}", "$type": "color" },
+    "m3": {
+      "on-surface":         { "$value": "{color.primitive.neutral.900}", "$type": "color" },
+      "on-surface-variant": { "$value": "{color.primitive.neutral.600}", "$type": "color" },
+      "surface":            { "$value": "#fef7ff",                       "$type": "color" }
     }
-  },
-
-  "shadow": {
-    "sm": { "$value": "0 1px 2px 0 rgba(18, 21, 29, 0.06), 0 1px 1px 0 rgba(18, 21, 29, 0.04)", "$type": "shadow" },
-    "md": { "$value": "0 4px 8px -2px rgba(18, 21, 29, 0.10), 0 2px 4px -2px rgba(18, 21, 29, 0.06)", "$type": "shadow" },
-    "lg": { "$value": "0 12px 24px -8px rgba(18, 21, 29, 0.14), 0 4px 8px -4px rgba(18, 21, 29, 0.06)", "$type": "shadow" }
   }
 }
