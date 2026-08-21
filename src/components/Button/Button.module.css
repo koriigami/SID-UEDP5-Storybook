@@ -2,17 +2,24 @@
  * Every value below is a design token. The four types set only what differs
  * from the primary defaults; sizes only differ in height and padding.
  *
+ * State-layer overlays are NOT a single opacity multiplied by a shared
+ * color — Figma bakes a distinct rgba() per type per state
+ * (color.overlay.<type>.{hover,focus,pressed}), so each type sets its own
+ * --_overlay-hover/focus/pressed triplet instead of one flat value.
+ *
  * Icon size is cascaded via the --_icon-size custom property so the .icon
  * span always has an explicit width/height, no matter what SVG the caller
  * passes in.
  */
 
 .root {
-  --_bg:          var(--color-button-background-primary);
-  --_fg:          var(--color-button-text-primary);
-  --_stroke:      transparent;
-  --_state-layer: var(--color-state-layer-on-brand);
-  --_icon-size:   var(--size-icon-default);
+  --_bg:               var(--color-button-background-primary);
+  --_fg:               var(--color-button-text-primary);
+  --_stroke:           transparent;
+  --_overlay-hover:    var(--color-overlay-primary-hover);
+  --_overlay-focus:    var(--color-overlay-primary-focus);
+  --_overlay-pressed:  var(--color-overlay-primary-pressed);
+  --_icon-size:        var(--size-icon-default);
 
   position: relative;
   display: inline-flex;
@@ -45,22 +52,28 @@
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
 .type-tonal {
-  --_bg: var(--color-button-background-accent);
-  --_fg: var(--color-button-icon-accent);
-  --_state-layer: var(--color-state-layer-on-accent);
+  --_bg: var(--color-button-background-tonal);
+  --_fg: var(--color-button-text-tonal);
+  --_overlay-hover:   var(--color-overlay-tonal-hover);
+  --_overlay-focus:   var(--color-overlay-tonal-focus);
+  --_overlay-pressed: var(--color-overlay-tonal-pressed);
 }
 
 .type-outline {
   --_bg: var(--color-button-background-secondary);
   --_fg: var(--color-button-text-secondary);
   --_stroke: var(--color-button-stroke-secondary);
-  --_state-layer: var(--color-state-layer-on-surface);
+  --_overlay-hover:   var(--color-overlay-outline-hover);
+  --_overlay-focus:   var(--color-overlay-outline-focus);
+  --_overlay-pressed: var(--color-overlay-outline-pressed);
 }
 
 .type-text {
   --_bg: transparent;
   --_fg: var(--color-button-text-secondary);
-  --_state-layer: var(--color-state-layer-on-surface);
+  --_overlay-hover:   var(--color-overlay-text-hover);
+  --_overlay-focus:   var(--color-overlay-text-focus);
+  --_overlay-pressed: var(--color-overlay-text-pressed);
 }
 
 /* ── Sizes ─────────────────────────────────────────────────────────────── */
@@ -95,9 +108,8 @@
 .stateLayer {
   position: absolute;
   inset: 0;
-  background: var(--_state-layer);
-  opacity: 0;
-  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  background: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
   pointer-events: none;
 }
 
@@ -126,13 +138,13 @@
 
 /* Hover / focus / active — real states and forced-state utilities. */
 .root:hover:not(:disabled) .stateLayer,
-.root.state-hover .stateLayer                     { opacity: var(--opacity-state-hover); }
+.root.state-hover .stateLayer                     { background: var(--_overlay-hover); }
 
 .root:focus-visible:not(:disabled) .stateLayer,
-.root.state-focused .stateLayer                   { opacity: var(--opacity-state-focus); }
+.root.state-focused .stateLayer                   { background: var(--_overlay-focus); }
 
 .root:active:not(:disabled) .stateLayer,
-.root.state-pressed .stateLayer                   { opacity: var(--opacity-state-pressed); }
+.root.state-pressed .stateLayer                   { background: var(--_overlay-pressed); }
 
 .root:focus-visible,
 .root.state-focused {

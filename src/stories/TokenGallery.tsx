@@ -2,7 +2,7 @@ import { tokens } from "../tokens/generated";
 
 type Kind = "color" | "size" | "text";
 
-const SECTIONS: Array<{ title: string; group: keyof typeof tokens; prefix: string; kind: Kind }> = [
+const SECTIONS: Array<{ title: string; group: keyof typeof tokens; prefix: string; kind: Kind; exclude?: string[] }> = [
   { title: "Backgrounds",         group: "color", prefix: "color-background-",  kind: "color" },
   { title: "Text",                group: "color", prefix: "color-text-",        kind: "color" },
   { title: "Icons",               group: "color", prefix: "color-icon-",        kind: "color" },
@@ -11,7 +11,8 @@ const SECTIONS: Array<{ title: string; group: keyof typeof tokens; prefix: strin
   { title: "Button — text",       group: "color", prefix: "color-button-text-",       kind: "color" },
   { title: "Button — icon",       group: "color", prefix: "color-button-icon-",       kind: "color" },
   { title: "Button — stroke",     group: "color", prefix: "color-button-stroke-",     kind: "color" },
-  { title: "State layers",        group: "color", prefix: "color-state-layer-",       kind: "color" },
+  { title: "Overlay (state layers, per button type)", group: "color", prefix: "color-overlay-", kind: "color" },
+  { title: "State layers (checkbox / radio)", group: "color", prefix: "color-state-layer-", kind: "color" },
   { title: "Material 3 aliases",  group: "color", prefix: "color-m3-",                kind: "color" },
   { title: "Focus ring",          group: "color", prefix: "color-focus-ring",         kind: "color" },
   { title: "Neutrals (primitive)",group: "color", prefix: "color-primitive-neutral-", kind: "color" },
@@ -20,18 +21,21 @@ const SECTIONS: Array<{ title: string; group: keyof typeof tokens; prefix: strin
   { title: "Spacing",             group: "space",  prefix: "space-",        kind: "size" },
   { title: "Radius",              group: "radius", prefix: "radius-",       kind: "size" },
   { title: "Button heights",      group: "size",   prefix: "size-button-",  kind: "size" },
-  { title: "Icon sizes",          group: "size",   prefix: "size-icon-",    kind: "size" },
+  { title: "Icon Button sizes",   group: "size",   prefix: "size-icon-button-", kind: "size" },
+  { title: "Icon sizes",          group: "size",   prefix: "size-icon-",    kind: "size", exclude: ["size-icon-button-"] },
 
   { title: "Typography (Qwark)",  group: "font",   prefix: "font-qwark-",   kind: "text" },
   { title: "Motion — duration",   group: "motion", prefix: "motion-duration-", kind: "text" },
   { title: "Motion — easing",     group: "motion", prefix: "motion-easing-",   kind: "text" },
 ];
 
-function collect(group: keyof typeof tokens, prefix: string) {
+function collect(group: keyof typeof tokens, prefix: string, exclude?: string[]) {
   const g = tokens[group] ?? {};
   return Object.entries(g)
     .filter(([name]) => name.startsWith(prefix))
-    // Prevent the more general "color-primitive-" section from including neutrals which have their own section
+    // Prevent a general prefix section (e.g. "color-primitive-", "size-icon-") from
+    // double-listing entries that belong to a more specific section already shown above it.
+    .filter(([name]) => !(exclude ?? []).some((ex) => name.startsWith(ex)))
     .filter(([name]) => (prefix === "color-primitive-" ? !name.startsWith("color-primitive-neutral-") : true))
     .sort(([a], [b]) => a.localeCompare(b));
 }
@@ -40,7 +44,7 @@ export function TokenGallery() {
   return (
     <div style={{ display: "grid", gap: 40 }}>
       {SECTIONS.map((s) => (
-        <Section key={s.title} title={s.title} rows={collect(s.group, s.prefix)} kind={s.kind} />
+        <Section key={s.title} title={s.title} rows={collect(s.group, s.prefix, s.exclude)} kind={s.kind} />
       ))}
     </div>
   );

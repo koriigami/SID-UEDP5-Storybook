@@ -59,10 +59,15 @@
       "small":    { "$value": "40px", "$type": "dimension" },
       "xsmall":   { "$value": "32px", "$type": "dimension" }
     },
+    "icon-button": {
+      "default":  { "$value": "56px", "$type": "dimension" },
+      "small":    { "$value": "48px", "$type": "dimension" },
+      "xsmall":   { "$value": "48px", "$type": "dimension" }
+    },
     "icon": {
       "default":  { "$value": "24px", "$type": "dimension" },
       "small":    { "$value": "20px", "$type": "dimension" },
-      "xsmall":   { "$value": "18px", "$type": "dimension" }
+      "xsmall":   { "$value": "20px", "$type": "dimension" }
     },
     "control": {
       "default":  { "$value": "48px", "$type": "dimension" }
