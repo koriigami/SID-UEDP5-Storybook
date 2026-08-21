@@ -1,71 +1,60 @@
 import { tokens } from "../tokens/generated";
 
-const SECTIONS: Array<{ title: string; prefix: string; kind: Kind }> = [
-  { title: "Color — semantic",  prefix: "color-",                              kind: "color" },
-  { title: "Color — neutral primitive", prefix: "color-primitive-neutral-",   kind: "color" },
-  { title: "Color — Rich palette (from Figma)", prefix: "color-palette-rich-",kind: "color" },
-  { title: "Spacing",           prefix: "space-",                              kind: "size" },
-  { title: "Radius",            prefix: "radius-",                             kind: "size" },
-  { title: "Control sizes",     prefix: "size-control-",                       kind: "size" },
-  { title: "Typography — size", prefix: "font-size-",                          kind: "size" },
-  { title: "Typography — weight", prefix: "font-weight-",                      kind: "text" },
-  { title: "Typography — line-height", prefix: "font-line-height-",            kind: "text" },
-  { title: "Motion — duration", prefix: "motion-duration-",                    kind: "text" },
-  { title: "Motion — easing",   prefix: "motion-easing-",                      kind: "text" },
-];
-
 type Kind = "color" | "size" | "text";
+
+const SECTIONS: Array<{ title: string; group: keyof typeof tokens; prefix: string; kind: Kind }> = [
+  { title: "Backgrounds",         group: "color", prefix: "color-background-",  kind: "color" },
+  { title: "Text",                group: "color", prefix: "color-text-",        kind: "color" },
+  { title: "Icons",               group: "color", prefix: "color-icon-",        kind: "color" },
+  { title: "Strokes",             group: "color", prefix: "color-stroke-",      kind: "color" },
+  { title: "Button — background", group: "color", prefix: "color-button-background-", kind: "color" },
+  { title: "Button — text",       group: "color", prefix: "color-button-text-",       kind: "color" },
+  { title: "Button — icon",       group: "color", prefix: "color-button-icon-",       kind: "color" },
+  { title: "Button — stroke",     group: "color", prefix: "color-button-stroke-",     kind: "color" },
+  { title: "State layers",        group: "color", prefix: "color-state-layer-",       kind: "color" },
+  { title: "Material 3 aliases",  group: "color", prefix: "color-m3-",                kind: "color" },
+  { title: "Focus ring",          group: "color", prefix: "color-focus-ring",         kind: "color" },
+  { title: "Neutrals (primitive)",group: "color", prefix: "color-primitive-neutral-", kind: "color" },
+  { title: "Brand + Cyan + Error (primitive)", group: "color", prefix: "color-primitive-", kind: "color" },
+
+  { title: "Spacing",             group: "space",  prefix: "space-",        kind: "size" },
+  { title: "Radius",              group: "radius", prefix: "radius-",       kind: "size" },
+  { title: "Button heights",      group: "size",   prefix: "size-button-",  kind: "size" },
+  { title: "Icon sizes",          group: "size",   prefix: "size-icon-",    kind: "size" },
+
+  { title: "Typography (Qwark)",  group: "font",   prefix: "font-qwark-",   kind: "text" },
+  { title: "Motion — duration",   group: "motion", prefix: "motion-duration-", kind: "text" },
+  { title: "Motion — easing",     group: "motion", prefix: "motion-easing-",   kind: "text" },
+];
 
 function collect(group: keyof typeof tokens, prefix: string) {
   const g = tokens[group] ?? {};
   return Object.entries(g)
     .filter(([name]) => name.startsWith(prefix))
-    // Semantic + primitive + palette live in the same group; exclude non-semantic rows from the semantic section.
-    .filter(([name]) =>
-      prefix === "color-"
-        ? !name.startsWith("color-primitive-") && !name.startsWith("color-palette-")
-        : true,
-    )
+    // Prevent the more general "color-primitive-" section from including neutrals which have their own section
+    .filter(([name]) => (prefix === "color-primitive-" ? !name.startsWith("color-primitive-neutral-") : true))
     .sort(([a], [b]) => a.localeCompare(b));
 }
-
-const groupFor = (prefix: string): keyof typeof tokens => {
-  if (prefix.startsWith("color")) return "color";
-  if (prefix.startsWith("space")) return "space";
-  if (prefix.startsWith("radius")) return "radius";
-  if (prefix.startsWith("size")) return "size";
-  if (prefix.startsWith("font")) return "font";
-  if (prefix.startsWith("motion")) return "motion";
-  return "color";
-};
 
 export function TokenGallery() {
   return (
     <div style={{ display: "grid", gap: 40 }}>
       {SECTIONS.map((s) => (
-        <Section key={s.title} title={s.title} rows={collect(groupFor(s.prefix), s.prefix)} kind={s.kind} />
+        <Section key={s.title} title={s.title} rows={collect(s.group, s.prefix)} kind={s.kind} />
       ))}
     </div>
   );
 }
 
-function Section({
-  title,
-  rows,
-  kind,
-}: {
-  title: string;
-  rows: Array<[string, string]>;
-  kind: Kind;
-}) {
+function Section({ title, rows, kind }: { title: string; rows: Array<[string, string]>; kind: Kind }) {
   if (rows.length === 0) return null;
   return (
     <section>
-      <h3 style={{ marginBottom: 12 }}>{title}</h3>
+      <h3 style={{ marginBottom: 12, fontFamily: "var(--font-family-serif)" }}>{title}</h3>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
           gap: 12,
         }}
       >
@@ -79,31 +68,34 @@ function Section({
 
 function Swatch({ name, value, kind }: { name: string; value: string; kind: Kind }) {
   const varRef = `var(--${name})`;
-  const border = "1px solid var(--color-border-subtle)";
+  const border = "1px solid var(--color-stroke-default)";
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "center", padding: 8, border, borderRadius: 8 }}>
+    <div style={{ display: "flex", gap: 12, alignItems: "center", padding: 10, border, borderRadius: 8, background: "var(--color-background-surface)" }}>
       <div
         style={{
-          width: 40,
-          height: 40,
-          borderRadius: 6,
-          background: kind === "color" ? varRef : "var(--color-surface-sunken)",
-          display: kind === "size" ? "flex" : undefined,
+          width: 44,
+          height: 44,
+          borderRadius: 8,
+          background: kind === "color" ? varRef : "var(--color-background-sunken)",
+          display: kind !== "color" ? "flex" : undefined,
           alignItems: "center",
           justifyContent: "center",
           border,
           overflow: "hidden",
+          color: "var(--color-text-primary)",
         }}
       >
         {kind === "size" && (
-          <div style={{ background: "var(--color-accent-default)", width: varRef, height: 6, borderRadius: 3 }} />
+          <div style={{ background: "var(--color-icon-accent)", width: varRef, height: 6, borderRadius: 3 }} />
         )}
         {kind === "text" && (
-          <div style={{ fontSize: 12, color: "var(--color-text-secondary)", padding: 6 }}>{value}</div>
+          <div style={{ fontSize: 11, color: "var(--color-text-secondary)", padding: 4, textAlign: "center" }}>{value}</div>
         )}
       </div>
-      <div style={{ display: "grid", minWidth: 0 }}>
-        <code style={{ fontSize: 12, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>--{name}</code>
+      <div style={{ display: "grid", minWidth: 0, fontFamily: "var(--font-family-serif)" }}>
+        <code style={{ fontFamily: "var(--font-family-sans)", fontSize: 12, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: "var(--color-text-primary)" }}>
+          --{name}
+        </code>
         <small style={{ color: "var(--color-text-secondary)" }}>{value}</small>
       </div>
     </div>

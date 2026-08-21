@@ -3,95 +3,91 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.css";
 
 /**
- * Variant props mirror the Figma `Button` component's variant properties
- * (`variant`, `size`, `tone`, `iconOnly`, `loading`). Keep the names in sync
- * with Figma so Code Connect mappings stay 1:1.
+ * Qwark Button — mirrors Figma node 14:21.
+ * Variant properties match the Figma component 1:1:
+ *   - type:  "primary" | "tonal" | "outline" | "text"
+ *   - size:  "default" | "small" | "xsmall"
+ *   - state: "default" | "hover" | "focused" | "pressed" | "disabled" (state=hover/focused/pressed
+ *            is normally handled by :hover/:focus-visible/:active — the explicit prop is exposed
+ *            for the docs matrix that needs to render every combination side by side).
  */
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonType = "primary" | "tonal" | "outline" | "text";
+export type ButtonSize = "default" | "small" | "xsmall";
+export type ButtonForcedState = "default" | "hover" | "focused" | "pressed" | "disabled";
 
-type BaseProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "children">;
-
-type LabelledProps = BaseProps & {
-  children: ReactNode;
-  iconOnly?: false;
-  ariaLabel?: string;
-  variant?: ButtonVariant;
+export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "children"> & {
+  buttonType?: ButtonType;
   size?: ButtonSize;
-  loading?: boolean;
-  disabled?: boolean;
+  /** For the docs matrix. In real usage leave this as `default` and let CSS handle interactive state. */
+  forcedState?: ButtonForcedState;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
-};
-
-/** Icon-only variant REQUIRES ariaLabel — enforced by the type union. */
-type IconOnlyProps = BaseProps & {
-  iconOnly: true;
-  ariaLabel: string;
-  children: ReactNode;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
   loading?: boolean;
-  disabled?: boolean;
+  children: ReactNode;
+  /** Optional native form type. Defaults to "button" so the component never accidentally submits a form. */
+  htmlType?: "button" | "submit" | "reset";
 };
 
-export type ButtonProps = LabelledProps | IconOnlyProps;
+const DEFAULT_ARROW = (
+  <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+    <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 const Spinner = () => (
-  <span className={styles.spinner} aria-hidden="true">
-    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
-      <circle cx="12" cy="12" r="9" fill="none" strokeWidth="3" opacity="0.25" />
-      <path d="M21 12a9 9 0 0 1-9 9" fill="none" strokeWidth="3" strokeLinecap="round" />
-    </svg>
-  </span>
+  <svg viewBox="0 0 24 24" width="100%" height="100%" className={styles.spinner} aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
+    <path d="M21 12a9 9 0 0 1-9 9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </svg>
 );
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  props,
-  ref,
-) {
-  const {
-    variant = "primary",
-    size = "md",
+  {
+    buttonType = "primary",
+    size = "default",
+    forcedState = "default",
+    leadingIcon,
+    trailingIcon,
     loading = false,
-    disabled = false,
-    ariaLabel,
+    disabled,
+    htmlType = "button",
     className,
     children,
     ...rest
-  } = props;
+  },
+  ref,
+) {
+  const effectiveState: ButtonForcedState = disabled ? "disabled" : forcedState;
 
-  const iconOnly = (props as IconOnlyProps).iconOnly === true;
-  const leadingIcon = !iconOnly ? (props as LabelledProps).leadingIcon : undefined;
-  const trailingIcon = !iconOnly ? (props as LabelledProps).trailingIcon : undefined;
-
-  const classes = [
+  const rootClass = [
     styles.root,
-    styles[`variant-${variant}`],
+    styles[`type-${buttonType}`],
     styles[`size-${size}`],
-    iconOnly ? styles.iconOnly : "",
+    effectiveState !== "default" ? styles[`state-${effectiveState}`] : "",
     loading ? styles.loading : "",
     className ?? "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ].filter(Boolean).join(" ");
 
   return (
     <button
       ref={ref}
-      type="button"
+      type={htmlType}
       {...rest}
-      className={classes}
-      disabled={disabled || loading}
+      className={rootClass}
+      disabled={disabled || loading || effectiveState === "disabled"}
       aria-busy={loading || undefined}
-      aria-label={ariaLabel}
+      data-figma-node="14:21"
     >
-      {loading && <Spinner />}
-      <span className={styles.contents} data-hidden={loading || undefined}>
-        {leadingIcon && <span className={styles.icon}>{leadingIcon}</span>}
+      <span className={styles.stateLayer} aria-hidden="true" />
+      <span className={styles.content} data-hidden={loading || undefined}>
+        {leadingIcon !== undefined && <span className={styles.icon}>{leadingIcon}</span>}
         <span className={styles.label}>{children}</span>
-        {trailingIcon && <span className={styles.icon}>{trailingIcon}</span>}
+        {trailingIcon !== undefined && <span className={styles.icon}>{trailingIcon}</span>}
+        {leadingIcon === undefined && trailingIcon === undefined && (
+          <span className={styles.icon} aria-hidden="true">{DEFAULT_ARROW}</span>
+        )}
       </span>
+      {loading && <span className={styles.spinnerWrap}><Spinner /></span>}
     </button>
   );
 });

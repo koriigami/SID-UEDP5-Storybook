@@ -1,0 +1,84 @@
+.root {
+  --_bg:          var(--color-button-background-primary);
+  --_fg:          var(--color-button-icon-primary);
+  --_stroke:      transparent;
+  --_state-layer: var(--color-state-layer-on-brand);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  border: 1px solid var(--_stroke);
+  border-radius: var(--radius-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  cursor: pointer;
+
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    color            var(--motion-duration-fast) var(--motion-easing-standard),
+    border-color     var(--motion-duration-fast) var(--motion-easing-standard),
+    box-shadow       var(--motion-duration-fast) var(--motion-easing-standard);
+}
+
+.type-tonal {
+  --_bg: var(--color-button-background-accent);
+  --_fg: var(--color-button-icon-accent);
+  --_state-layer: var(--color-state-layer-on-accent);
+}
+.type-outline {
+  --_bg: var(--color-button-background-secondary);
+  --_fg: var(--color-button-icon-secondary);
+  --_stroke: var(--color-button-stroke-secondary);
+  --_state-layer: var(--color-state-layer-on-surface);
+}
+/** "Standard" = icon-only ghost: transparent, uses primary icon color. */
+.type-standard {
+  --_bg: transparent;
+  --_fg: var(--color-icon-primary);
+  --_state-layer: var(--color-state-layer-on-surface);
+}
+
+.size-default { width: var(--size-button-default); height: var(--size-button-default); }
+.size-small   { width: var(--size-button-small);   height: var(--size-button-small); }
+.size-xsmall  { width: var(--size-button-xsmall);  height: var(--size-button-xsmall); }
+
+.size-default .icon { width: var(--size-icon-default); height: var(--size-icon-default); }
+.size-small   .icon { width: var(--size-icon-small);   height: var(--size-icon-small); }
+.size-xsmall  .icon { width: var(--size-icon-xsmall);  height: var(--size-icon-xsmall); }
+
+.stateLayer {
+  position: absolute; inset: 0;
+  background: var(--_state-layer);
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  pointer-events: none;
+}
+.icon { position: relative; display: inline-flex; align-items: center; justify-content: center; z-index: 1; }
+
+.root:hover:not(:disabled) .stateLayer,      .root.state-hover .stateLayer    { opacity: var(--opacity-state-hover); }
+.root:focus-visible:not(:disabled) .stateLayer, .root.state-focused .stateLayer{ opacity: var(--opacity-state-focus); }
+.root:active:not(:disabled) .stateLayer,     .root.state-pressed .stateLayer  { opacity: var(--opacity-state-pressed); }
+
+.root:focus-visible, .root.state-focused {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--size-focus-ring) var(--color-background-primary),
+    0 0 0 calc(var(--size-focus-ring) * 2) var(--color-focus-ring);
+}
+
+.root:disabled, .root.state-disabled {
+  --_bg:     var(--color-button-background-disabled);
+  --_fg:     var(--color-button-icon-disabled);
+  --_stroke: var(--color-button-stroke-disabled);
+  cursor: not-allowed;
+}
+.root.type-standard:disabled, .root.type-standard.state-disabled {
+  --_bg: transparent; --_stroke: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root, .stateLayer { transition: none; }
+}
