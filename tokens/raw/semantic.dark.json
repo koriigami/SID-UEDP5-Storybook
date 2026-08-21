@@ -27,11 +27,13 @@
         "primary":   { "$value": "{color.primitive.cyan.50}",     "$type": "color" },
         "secondary": { "$value": "{color.primitive.neutral.800}", "$type": "color" },
         "accent":    { "$value": "{color.primitive.brand.base}",  "$type": "color" },
+        "tonal":     { "$value": "{color.primitive.cyan.10}",     "$type": "color" },
         "disabled":  { "$value": "{color.primitive.neutral.700}", "$type": "color" }
       },
       "text": {
         "primary":   { "$value": "{color.primitive.brand.base}",  "$type": "color" },
         "secondary": { "$value": "{color.primitive.neutral.50}",  "$type": "color" },
+        "tonal":     { "$value": "{color.primitive.neutral.800}", "$type": "color" },
         "disabled":  { "$value": "{color.primitive.neutral.500}", "$type": "color" }
       },
       "icon": {
@@ -52,6 +54,28 @@
       "on-error":     { "$value": "rgba(218, 30, 40, 0.10)",    "$type": "color" }
     },
     "focus-ring": { "$value": "{color.primitive.cyan.50}", "$type": "color" },
+    "overlay": {
+      "primary": {
+        "hover":   { "$value": "rgba(69, 137, 255, 0.12)", "$type": "color" },
+        "focus":   { "$value": "rgba(69, 137, 255, 0.20)", "$type": "color" },
+        "pressed": { "$value": "rgba(69, 137, 255, 0.30)", "$type": "color" }
+      },
+      "tonal": {
+        "hover":   { "$value": "rgba(51, 177, 255, 0.12)", "$type": "color" },
+        "focus":   { "$value": "rgba(51, 177, 255, 0.20)", "$type": "color" },
+        "pressed": { "$value": "rgba(51, 177, 255, 0.30)", "$type": "color" }
+      },
+      "outline": {
+        "hover":   { "$value": "rgba(255, 255, 255, 0.08)", "$type": "color" },
+        "focus":   { "$value": "rgba(255, 255, 255, 0.12)", "$type": "color" },
+        "pressed": { "$value": "rgba(255, 255, 255, 0.20)", "$type": "color" }
+      },
+      "text": {
+        "hover":   { "$value": "rgba(69, 137, 255, 0.08)", "$type": "color" },
+        "focus":   { "$value": "rgba(69, 137, 255, 0.12)", "$type": "color" },
+        "pressed": { "$value": "rgba(69, 137, 255, 0.20)", "$type": "color" }
+      }
+    },
     "m3": {
       "on-surface":         { "$value": "{color.primitive.neutral.100}", "$type": "color" },
       "on-surface-variant": { "$value": "{color.primitive.neutral.400}", "$type": "color" },

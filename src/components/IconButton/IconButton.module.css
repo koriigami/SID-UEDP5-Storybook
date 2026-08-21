@@ -1,10 +1,12 @@
 .root {
-  --_bg:          var(--color-button-background-primary);
-  --_fg:          var(--color-button-icon-primary);
-  --_stroke:      transparent;
-  --_state-layer: var(--color-state-layer-on-brand);
-  --_size:        var(--size-button-default);
-  --_icon-size:   var(--size-icon-default);
+  --_bg:               var(--color-button-background-primary);
+  --_fg:               var(--color-button-icon-primary);
+  --_stroke:           transparent;
+  --_overlay-hover:    var(--color-overlay-primary-hover);
+  --_overlay-focus:    var(--color-overlay-primary-focus);
+  --_overlay-pressed:  var(--color-overlay-primary-pressed);
+  --_size:             var(--size-icon-button-default);
+  --_icon-size:        var(--size-icon-default);
 
   position: relative;
   display: inline-flex;
@@ -30,32 +32,38 @@
 }
 
 .type-tonal {
-  --_bg: var(--color-button-background-accent);
+  --_bg: var(--color-button-background-tonal);
   --_fg: var(--color-button-icon-accent);
-  --_state-layer: var(--color-state-layer-on-accent);
+  --_overlay-hover:   var(--color-overlay-tonal-hover);
+  --_overlay-focus:   var(--color-overlay-tonal-focus);
+  --_overlay-pressed: var(--color-overlay-tonal-pressed);
 }
 .type-outline {
   --_bg: var(--color-button-background-secondary);
   --_fg: var(--color-button-icon-secondary);
   --_stroke: var(--color-button-stroke-secondary);
-  --_state-layer: var(--color-state-layer-on-surface);
+  --_overlay-hover:   var(--color-overlay-outline-hover);
+  --_overlay-focus:   var(--color-overlay-outline-focus);
+  --_overlay-pressed: var(--color-overlay-outline-pressed);
 }
-/** "Standard" = icon-only ghost: transparent, uses primary icon color. */
+/** "Standard" = white fill, no border (confirmed via Figma: same bg as
+    Outline, buttonBackground/secondary, just without the stroke). */
 .type-standard {
-  --_bg: transparent;
+  --_bg: var(--color-button-background-secondary);
   --_fg: var(--color-icon-primary);
-  --_state-layer: var(--color-state-layer-on-surface);
+  --_overlay-hover:   var(--color-overlay-outline-hover);
+  --_overlay-focus:   var(--color-overlay-outline-focus);
+  --_overlay-pressed: var(--color-overlay-outline-pressed);
 }
 
-.size-default { --_size: var(--size-button-default); --_icon-size: var(--size-icon-default); }
-.size-small   { --_size: var(--size-button-small);   --_icon-size: var(--size-icon-small); }
-.size-xsmall  { --_size: var(--size-button-xsmall);  --_icon-size: var(--size-icon-xsmall); }
+.size-default { --_size: var(--size-icon-button-default); --_icon-size: var(--size-icon-default); }
+.size-small   { --_size: var(--size-icon-button-small);   --_icon-size: var(--size-icon-small); }
+.size-xsmall  { --_size: var(--size-icon-button-xsmall);  --_icon-size: var(--size-icon-xsmall); }
 
 .stateLayer {
   position: absolute; inset: 0;
-  background: var(--_state-layer);
-  opacity: 0;
-  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard);
+  background: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
   pointer-events: none;
 }
 .icon {
@@ -70,9 +78,9 @@
 }
 .icon > svg { width: 100%; height: 100%; display: block; }
 
-.root:hover:not(:disabled) .stateLayer,         .root.state-hover .stateLayer    { opacity: var(--opacity-state-hover); }
-.root:focus-visible:not(:disabled) .stateLayer, .root.state-focused .stateLayer  { opacity: var(--opacity-state-focus); }
-.root:active:not(:disabled) .stateLayer,        .root.state-pressed .stateLayer  { opacity: var(--opacity-state-pressed); }
+.root:hover:not(:disabled) .stateLayer,         .root.state-hover .stateLayer    { background: var(--_overlay-hover); }
+.root:focus-visible:not(:disabled) .stateLayer, .root.state-focused .stateLayer  { background: var(--_overlay-focus); }
+.root:active:not(:disabled) .stateLayer,        .root.state-pressed .stateLayer  { background: var(--_overlay-pressed); }
 
 .root:focus-visible, .root.state-focused {
   outline: none;
@@ -88,7 +96,7 @@
   cursor: not-allowed;
 }
 .root.type-standard:disabled, .root.type-standard.state-disabled {
-  --_bg: transparent; --_stroke: transparent;
+  --_bg: var(--color-button-background-disabled);
 }
 
 @media (prefers-reduced-motion: reduce) {
