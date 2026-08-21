@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { IconButton, type IconButtonType, type IconButtonSize, type IconButtonForcedState } from "./IconButton";
 
 const DashboardIcon = (
-  <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path fill="currentColor" d="M3 13h8V3H3v10Zm0 8h8v-6H3v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z" />
   </svg>
 );

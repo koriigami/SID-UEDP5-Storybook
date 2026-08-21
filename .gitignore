@@ -10,3 +10,6 @@ dist
 src/styles/tokens.light.css
 src/styles/tokens.dark.css
 src/tokens/generated.ts
+
+# Trademarked FIP logos — fetched by scripts/fetch-fip-logos.mjs, never committed.
+public/fip-logos/*.svg
