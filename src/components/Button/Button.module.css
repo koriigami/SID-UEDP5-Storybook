@@ -1,6 +1,10 @@
 /*
  * Every value below is a design token. The four types set only what differs
  * from the primary defaults; sizes only differ in height and padding.
+ *
+ * Icon size is cascaded via the --_icon-size custom property so the .icon
+ * span always has an explicit width/height, no matter what SVG the caller
+ * passes in.
  */
 
 .root {
@@ -8,6 +12,7 @@
   --_fg:          var(--color-button-text-primary);
   --_stroke:      transparent;
   --_state-layer: var(--color-state-layer-on-brand);
+  --_icon-size:   var(--size-icon-default);
 
   position: relative;
   display: inline-flex;
@@ -28,6 +33,7 @@
 
   cursor: pointer;
   user-select: none;
+  box-sizing: border-box;
 
   transition:
     background-color var(--motion-duration-fast) var(--motion-easing-standard),
@@ -59,19 +65,30 @@
 
 /* ── Sizes ─────────────────────────────────────────────────────────────── */
 
-.size-default { height: var(--size-button-default); padding-inline: var(--space-7); gap: var(--space-3); }
-.size-small   { height: var(--size-button-small);   padding-inline: var(--space-5); gap: var(--space-3);
-                font-size: var(--font-qwark-label-large-size);
-                line-height: var(--font-qwark-label-large-line-height);
-                letter-spacing: var(--font-qwark-label-large-tracking); }
-.size-xsmall  { height: var(--size-button-xsmall);  padding-inline: var(--space-4); gap: var(--space-2);
-                font-size: var(--font-qwark-label-medium-size);
-                line-height: var(--font-qwark-label-medium-line-height);
-                letter-spacing: var(--font-qwark-label-medium-tracking); }
-
-.size-default .icon { width: var(--size-icon-default); height: var(--size-icon-default); }
-.size-small   .icon { width: var(--size-icon-small);   height: var(--size-icon-small); }
-.size-xsmall  .icon { width: var(--size-icon-xsmall);  height: var(--size-icon-xsmall); }
+.size-default {
+  height: var(--size-button-default);
+  padding-inline: var(--space-7);
+  gap: var(--space-3);
+  --_icon-size: var(--size-icon-default);
+}
+.size-small {
+  height: var(--size-button-small);
+  padding-inline: var(--space-5);
+  gap: var(--space-3);
+  font-size: var(--font-qwark-label-large-size);
+  line-height: var(--font-qwark-label-large-line-height);
+  letter-spacing: var(--font-qwark-label-large-tracking);
+  --_icon-size: var(--size-icon-small);
+}
+.size-xsmall {
+  height: var(--size-button-xsmall);
+  padding-inline: var(--space-4);
+  gap: var(--space-2);
+  font-size: var(--font-qwark-label-medium-size);
+  line-height: var(--font-qwark-label-medium-line-height);
+  letter-spacing: var(--font-qwark-label-medium-tracking);
+  --_icon-size: var(--size-icon-xsmall);
+}
 
 /* ── Interactive layers ────────────────────────────────────────────────── */
 
@@ -94,10 +111,20 @@
 }
 .content[data-hidden] { visibility: hidden; }
 
-.icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--_icon-size);
+  height: var(--_icon-size);
+  color: currentColor;
+}
+.icon > svg { width: 100%; height: 100%; display: block; }
+
 .label { white-space: nowrap; }
 
-/* Hover / focus / active — real states and forced-state utilities.       */
+/* Hover / focus / active — real states and forced-state utilities. */
 .root:hover:not(:disabled) .stateLayer,
 .root.state-hover .stateLayer                     { opacity: var(--opacity-state-hover); }
 
@@ -136,7 +163,7 @@
   color: currentColor;
   z-index: 2;
 }
-.spinnerWrap svg { width: var(--size-icon-default); height: var(--size-icon-default); }
+.spinnerWrap svg { width: var(--_icon-size); height: var(--_icon-size); }
 .spinner { animation: qwark-btn-spin var(--motion-duration-slow) linear infinite; transform-origin: center; }
 @keyframes qwark-btn-spin { to { transform: rotate(360deg); } }
 

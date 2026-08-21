@@ -28,14 +28,8 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type" |
   htmlType?: "button" | "submit" | "reset";
 };
 
-const DEFAULT_ARROW = (
-  <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
-    <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 const Spinner = () => (
-  <svg viewBox="0 0 24 24" width="100%" height="100%" className={styles.spinner} aria-hidden="true" focusable="false">
+  <svg viewBox="0 0 24 24" className={styles.spinner} aria-hidden="true" focusable="false">
     <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
     <path d="M21 12a9 9 0 0 1-9 9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
   </svg>
@@ -80,12 +74,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     >
       <span className={styles.stateLayer} aria-hidden="true" />
       <span className={styles.content} data-hidden={loading || undefined}>
-        {leadingIcon !== undefined && <span className={styles.icon}>{leadingIcon}</span>}
+        {leadingIcon && <span className={styles.icon}>{leadingIcon}</span>}
         <span className={styles.label}>{children}</span>
-        {trailingIcon !== undefined && <span className={styles.icon}>{trailingIcon}</span>}
-        {leadingIcon === undefined && trailingIcon === undefined && (
-          <span className={styles.icon} aria-hidden="true">{DEFAULT_ARROW}</span>
-        )}
+        {trailingIcon && <span className={styles.icon}>{trailingIcon}</span>}
       </span>
       {loading && <span className={styles.spinnerWrap}><Spinner /></span>}
     </button>

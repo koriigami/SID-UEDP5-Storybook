@@ -1,0 +1,35 @@
+import { Meta } from "@storybook/blocks";
+import { FipLogoGrid } from "./FipLogoGrid";
+
+<Meta title="Foundations/Icons — FIP Logos" />
+
+# FIP Logos
+
+35 Financial Information Provider logos pulled from the Figma frame
+`320:260` — banks, depositories, RTAs, and CRAs used across the Qwark
+Account Aggregator flows.
+
+**Grouping in one page:** rather than shipping 35 separate stories, this
+page renders the full set filterable by FIP type. Selecting a chip narrows
+the grid without a page reload.
+
+## Populating the SVGs
+
+The actual bank marks are trademarked, so they're **not committed** to the
+repo. Files live at `public/fip-logos/<slug>.svg` and are loaded at runtime
+by the cards below. When a file is missing the card falls back to a
+color-coded monogram chip — the page always renders.
+
+To populate:
+
+```bash
+export FIGMA_ACCESS_TOKEN=figd_...   # your Figma PAT with file:read scope
+npm run fip-logos:fetch
+```
+
+The script (`scripts/fetch-fip-logos.mjs`) walks the manifest at
+`src/stories/fip-logos.ts`, calls the Figma REST API for each `nodeId`, and
+saves the SVG under the matching `slug`. It uses the file's exported vector
+so what you get is byte-identical to what Figma serves.
+
+<FipLogoGrid />
