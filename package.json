@@ -12,9 +12,8 @@
     "tokens": "npm run tokens:build",
     "predev": "npm run tokens",
     "dev": "storybook dev -p 6006 --no-open",
-    "prebuild": "npm run tokens",
-    "build-storybook": "storybook build --output-dir storybook-static",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" \"style-dictionary.config.mjs\"",
+    "build-storybook": "npm run tokens && storybook build --output-dir storybook-static",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"scripts/**/*.mjs\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
