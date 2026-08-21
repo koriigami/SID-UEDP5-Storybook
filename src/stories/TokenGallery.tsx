@@ -2,7 +2,8 @@ import { tokens } from "../tokens/generated";
 
 const SECTIONS: Array<{ title: string; prefix: string; kind: Kind }> = [
   { title: "Color — semantic",  prefix: "color-",                              kind: "color" },
-  { title: "Color — primitive", prefix: "color-primitive-",                    kind: "color" },
+  { title: "Color — neutral primitive", prefix: "color-primitive-neutral-",   kind: "color" },
+  { title: "Color — Rich palette (from Figma)", prefix: "color-palette-rich-",kind: "color" },
   { title: "Spacing",           prefix: "space-",                              kind: "size" },
   { title: "Radius",            prefix: "radius-",                             kind: "size" },
   { title: "Control sizes",     prefix: "size-control-",                       kind: "size" },
@@ -19,18 +20,20 @@ function collect(group: keyof typeof tokens, prefix: string) {
   const g = tokens[group] ?? {};
   return Object.entries(g)
     .filter(([name]) => name.startsWith(prefix))
-    // Semantic + primitive live in the same group; exclude primitive rows from semantic sections.
-    .filter(([name]) => (prefix === "color-" ? !name.startsWith("color-primitive-") : true))
+    // Semantic + primitive + palette live in the same group; exclude non-semantic rows from the semantic section.
+    .filter(([name]) =>
+      prefix === "color-"
+        ? !name.startsWith("color-primitive-") && !name.startsWith("color-palette-")
+        : true,
+    )
     .sort(([a], [b]) => a.localeCompare(b));
 }
 
 const groupFor = (prefix: string): keyof typeof tokens => {
   if (prefix.startsWith("color")) return "color";
-  if (prefix.startsWith("space") || prefix.startsWith("radius") || prefix.startsWith("size")) {
-    if (prefix.startsWith("space")) return "space";
-    if (prefix.startsWith("radius")) return "radius";
-    return "size";
-  }
+  if (prefix.startsWith("space")) return "space";
+  if (prefix.startsWith("radius")) return "radius";
+  if (prefix.startsWith("size")) return "size";
   if (prefix.startsWith("font")) return "font";
   if (prefix.startsWith("motion")) return "motion";
   return "color";

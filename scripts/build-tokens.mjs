@@ -55,6 +55,7 @@ function makeConfig(mode) {
     log: { verbosity: "silent", warnings: "disabled" },
     source: [
       "tokens/raw/primitives.json",
+      "tokens/raw/palette.rich.json",
       `tokens/raw/semantic.${mode}.json`,
     ],
     platforms: {
