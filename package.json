@@ -1,0 +1,48 @@
+{
+  "name": "sid-uedp5-storybook",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "tokens:fetch": "node scripts/fetch-figma-tokens.mjs",
+    "tokens:build": "node scripts/build-tokens.mjs",
+    "tokens": "npm run tokens:build",
+    "predev": "npm run tokens",
+    "dev": "storybook dev -p 6006 --no-open",
+    "prebuild": "npm run tokens",
+    "build-storybook": "storybook build --output-dir storybook-static",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" \"style-dictionary.config.mjs\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.3.5",
+    "@storybook/addon-essentials": "^8.3.5",
+    "@storybook/addon-interactions": "^8.3.5",
+    "@storybook/blocks": "^8.3.5",
+    "@storybook/manager-api": "^8.3.5",
+    "@storybook/react": "^8.3.5",
+    "@storybook/react-vite": "^8.3.5",
+    "@storybook/test": "^8.3.5",
+    "@storybook/theming": "^8.3.5",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-storybook": "^0.9.0",
+    "storybook": "^8.3.5",
+    "style-dictionary": "^4.1.4",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
+  }
+}

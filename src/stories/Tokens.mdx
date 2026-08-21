@@ -1,0 +1,14 @@
+import { Meta } from "@storybook/blocks";
+import { TokenGallery } from "./TokenGallery";
+
+<Meta title="Foundations/Tokens" />
+
+# Design tokens
+
+Every value below is served by a CSS variable defined in
+`src/styles/tokens.{light,dark}.css`, which is generated from
+`tokens/raw/primitives.json + semantic.{light,dark}.json`. Toggle the
+**Theme** in the Storybook toolbar to see semantic tokens swap while
+primitives stay put.
+
+<TokenGallery />

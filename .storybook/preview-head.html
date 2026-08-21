@@ -1,0 +1,15 @@
+<!--
+  No-flash theme init: runs before paint so the story iframe never flashes the
+  wrong theme when the toolbar toggle sets `data-theme` after mount.
+-->
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("sb-theme");
+      if (t !== "dark" && t !== "light") t = "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (_) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  })();
+</script>

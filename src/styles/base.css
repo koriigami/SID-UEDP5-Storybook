@@ -1,0 +1,23 @@
+/* Global page paint driven entirely by tokens — no hex here on purpose. */
+
+html {
+  color-scheme: light dark;
+  background: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+body {
+  background: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  transition:
+    background-color var(--motion-duration-med) var(--motion-easing-standard),
+    color var(--motion-duration-med) var(--motion-easing-standard);
+}
+
+::selection {
+  background: var(--color-accent-subtle);
+  color: var(--color-text-primary);
+}
